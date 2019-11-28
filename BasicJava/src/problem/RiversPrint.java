@@ -20,9 +20,10 @@ public class RiversPrint {
 		Scanner sc = new Scanner(System.in);
 
 		System.out.println("정수를 입력하세요: ");
-		int num = sc.nextInt();
+		int num = sc.nextInt(); // 사용자가 입력한 정수값
 
 		for (int i = 1; i <= num; i++) {
+			
 			System.out.println(i);
 		}
 		System.out.println("****************************");
