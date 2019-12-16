@@ -1,6 +1,6 @@
 package problem.DDEnter;
 
-import javax.xml.crypto.Data;
+import java.sql.Date;
 
 public class MemberDTO {
 	// 1. 변수(DB Table 참조)
@@ -10,14 +10,13 @@ public class MemberDTO {
 	private String groupyn;
 	private String groupnm;
 	private int sal;
-	private Data regdate;
+	private Date regdate;
 
 	// 2. 생성자(Default, 전역변수 All)
 	public MemberDTO() {
 	}
 
-	public MemberDTO(String ano, String aname, String major, 
-			String groupyn, String groupnm, int sal, Data regdate) {
+	public MemberDTO(String ano, String aname, String major, String groupyn, String groupnm, int sal, Date regdate) {
 		super();
 		this.ano = ano;
 		this.aname = aname;
@@ -99,18 +98,17 @@ public class MemberDTO {
 		this.sal = sal;
 	}
 
-	public Data getRegdate() {
+	public Date getRegdate() {
 		return regdate;
 	}
 
-	public void setRegdate(Data regdate) {
+	public void setRegdate(Date regdate) {
 		this.regdate = regdate;
 	}
 
 	@Override
 	public String toString() {
-		return "MemberDTO [ano=" + ano + ", aname=" + aname + ", major=" + major + ", groupyn=" + groupyn + ", groupnm="
-				+ groupnm + ", sal=" + sal + ", regdate=" + regdate + "]";
+		return ano+"\t"+aname+"\t"+major+"\t"+groupyn+"\t"+groupnm+"\t"+sal+"\t"+regdate;
 	}
 	
 	//4.toString()

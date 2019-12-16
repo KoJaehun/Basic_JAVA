@@ -94,7 +94,11 @@ public class DDEnterMain {
 
 			} else if (code == 5) {
 				System.out.println("▒▒▒▒ 5번 검색을 선택하셨습니다");
-				mDao.memSearch();
+				System.out.println("▒▒▒▒ 검색할 아티스트를 입력해주세요");
+				System.out.print("▒▒▒▒ 입력>>");
+				sc.nextLine();
+				String aname = sc.nextLine();
+				mDao.memSearch(aname);
 
 			} else if (code == 6) {
 				System.out.println("▒▒▒▒ 프로그램 종료 ▒▒▒▒");

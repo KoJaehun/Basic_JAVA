@@ -1,11 +1,15 @@
 package problem.DDEnter;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
 
 public class MemberDAO {
 	Connection conn;
 	PreparedStatement pstmt;
+	ArrayList<MemberDTO> list = new ArrayList<>();
 
 	// 1. 아티스트 등록
 	public void memInsert(MemberDTO mDto) {
@@ -36,14 +40,15 @@ public class MemberDAO {
 	// 2. 아티스트 수정
 	public void memUpdate(MemberDTO mDto) {
 		try {
+			// 1. 드라이버 로드
+			// 2. Connection
+
+			// 3. SQL 작성 ( PreparedStatement )
+			// 4. SQL 실행
+			// 5. Close(연결끊기)
 			conn = DBManager.getConnection();
-			String sql = "UPDATE tbl_enter "
-					+ "SET aname = ?, "
-					+ "    major = ?, "
-					+ "    groupyn = ?, "
-					+ "    groupnm = ?, "
-					+ "    sal = ? "
-					+ "WHERE ano = ?";
+			String sql = "UPDATE tbl_enter " + "SET aname = ?, " + "    major = ?, " + "    groupyn = ?, "
+					+ "    groupnm = ?, " + "    sal = ? " + "WHERE ano = ?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, mDto.getAname());
 			pstmt.setString(2, mDto.getMajor());
@@ -52,7 +57,7 @@ public class MemberDAO {
 			pstmt.setInt(5, mDto.getSal());
 			pstmt.setString(6, mDto.getAno());
 			int result = pstmt.executeUpdate();
-			if(result > 0) {
+			if (result > 0) {
 				System.out.println("▒▒ " + mDto.getAname() + " 아티스트 정보를 수정하였습니다.");
 			} else {
 				System.out.println("▒▒ 정보 수정에 실패하였습니다.");
@@ -60,9 +65,16 @@ public class MemberDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			
+			try {
+				// 5. Close(연결끊기)
+				conn.close();
+				pstmt.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+
 		}
-		
+
 	}
 
 	// 3. 아티스트 삭제
@@ -98,10 +110,82 @@ public class MemberDAO {
 
 	// 4. 아티스트 조회
 	public void memSelect() {
+		try {
+			conn = DBManager.getConnection();
+			String sql = "SELECT * FROM tbl_enter";
+			pstmt = conn.prepareStatement(sql);
+
+			// 4. SQL 실행
+			// ResultSet = SELECT 문 결과를 담음
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				String ano = rs.getString("ano");
+				String aname = rs.getString("aname");
+				String major = rs.getString("major");
+				String groupyn = rs.getString("groupyn");
+				String groupnm = rs.getString("groupnm");
+				int sal = rs.getInt("sal");
+				Date regdate = rs.getDate("regdate");
+
+				MemberDTO mDto = new MemberDTO(ano, aname, major, groupyn, groupnm, sal, regdate);
+				list.add(mDto);
+				// 한줄씩 읽는다
+			}
+			for (MemberDTO line : list) {
+
+				// System.out.print(line.getAno()+"\t");
+				// System.out.print(line.getAname()+"\t");
+				// System.out.print(line.getMajor()+"\t");
+				// System.out.print(line.getGroupnm()+"\t");
+				// System.out.print(line.getGroupyn()+"\t");
+				// System.out.print(line.getSal()+"\t");
+				// System.out.print(line.getRegdate());
+				// System.out.println();
+				System.out.println(line.toString());
+			}
+
+			// ResultSet은 DB관련객체
+			// JAVA전용 ArrayList에 ResultSet에 데이터
+			// 옮겨 담는 작업이 필요해요
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+
+		}
 	}
 
 	// 5. 아티스트 검색
-	public void memSearch() {
+	public void memSearch(String aname) {
+		try {
+			conn = DBManager.getConnection();
+			String sql = "SELECT * FROM tbl_enter " + "WHERE aname LIKE ?";
+													// LIKE '%'||?||'%'
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, "%"+aname+"%");
+			ResultSet rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				String ano = rs.getString("ano");
+				aname = rs.getString("aname");
+				String major = rs.getString("major");
+				String groupyn = rs.getString("groupyn");
+				String groupnm = rs.getString("groupnm");
+				int sal = rs.getInt("sal");
+				Date regdate = rs.getDate("regdate");
+				
+				MemberDTO mDto = new MemberDTO(ano, aname, major, groupyn, groupnm, sal, regdate);
+				list.add(mDto);
+				
+			}
+			
+			for(MemberDTO line : list) {
+				System.out.println(line.toString());
+			}
+			
+		
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
-	
+
 }
