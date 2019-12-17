@@ -36,6 +36,7 @@ public class BoardDAO {
 		} finally {
 			try {
 				conn.close();
+				pstmt.close();
 			} catch (Exception e2) {
 				e2.printStackTrace();
 			} 
@@ -46,7 +47,11 @@ public class BoardDAO {
 	public void boardUpdate(BoardDTO bDTO) {
 		try {
 			conn = DBManager.getConnection();
-			String sql = "UPDATE tbl_board SET title = ?, " + "content = ?, " + "writer = ? " + "WHERE bno = ?";
+			String sql = "UPDATE tbl_board " +
+					"SET title = ?, "+
+					"content = ?, "+
+					"writer = ? "+
+					"WHERE bno = ?";
 			pstmt = conn.prepareCall(sql);
 			pstmt.setString(1, bDTO.getTitle());
 			pstmt.setString(2, bDTO.getContent());
@@ -64,6 +69,7 @@ public class BoardDAO {
 		} finally {	
 			try {
 				conn.close();
+				pstmt.close();
 			} catch (Exception e2) {
 				e2.printStackTrace();
 			}
@@ -73,7 +79,8 @@ public class BoardDAO {
 	public void boardDelete(int bno) {
 		try {
 			conn = DBManager.getConnection();
-			String sql = "DELETE FROM tbl_Board " + "WHERE bno = ?";
+			String sql = "DELETE FROM tbl_Board "+
+						"WHERE bno = ?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, bno);
 			int result = pstmt.executeUpdate();
@@ -87,6 +94,7 @@ public class BoardDAO {
 		} finally {
 			try {
 				conn.close();
+				pstmt.close();
 			} catch (Exception e2) {
 				e2.printStackTrace();
 			}
@@ -121,6 +129,8 @@ public class BoardDAO {
 		} finally {
 			try {
 				conn.close();
+				pstmt.close();
+				rs.close();
 			} catch (Exception e2) {
 				e2.printStackTrace();
 			}
@@ -131,7 +141,8 @@ public class BoardDAO {
 	public void boardSearch(String title) {
 		try {
 			conn = DBManager.getConnection();
-			String sql = "SELECT * FROM tbl_board " + "WHERE title LIKE ?";
+			String sql = "SELECT * FROM tbl_board "+
+					"WHERE title LIKE ?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, "%" + title + "%");
 			rs = pstmt.executeQuery();
@@ -155,6 +166,8 @@ public class BoardDAO {
 		} finally {
 			try {
 				conn.close();
+				pstmt.close();
+				rs.close();
 			} catch (Exception e2) {
 				e2.printStackTrace();
 			} 
