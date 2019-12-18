@@ -94,9 +94,14 @@ public class DDBoardMain {
 				mDao.boardSearch(title);
 				
 			} else if (code == 6) {
-				mDao.boardView();
-			} else if (code == 7) {
+				System.out.println("▨▨ 조회순으로 정렬 ");
 				mDao.boardSort();
+			} else if (code == 7) {
+				System.out.println("▨▨▨▨▨▨▨▨▨▨▨▨▨▨▨▨▨▨▨▨▨▨▨▨▨▨▨▨▨▨▨▨▨▨");
+				System.out.println("▨▨ 보고싶은 게시글번호를 입력하세요");
+				System.out.println("▨▨ 게시글번호입력>>");
+				int bno = sc.nextInt();
+				mDao.boardView(bno);
 			} else if (code == 8) {
 				System.out.println("▨▨▨▨▨▨▨▨▨▨▨▨▨▨▨▨▨▨▨▨▨▨▨▨▨▨▨▨▨▨▨▨▨▨");
 				System.out.println("▨▨ NAME: DD Board Program ");
