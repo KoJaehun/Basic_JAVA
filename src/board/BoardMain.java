@@ -24,7 +24,8 @@ public class BoardMain {
 			System.out.println("■■■■ 4. 게시글수정 ");
 			System.out.println("■■■■ 5. 게시글삭제 ");
 			System.out.println("■■■■ 6. 상세게시글조회 ");
-			System.out.println("■■■■ 7. 게시판 종료 ");
+			System.out.println("■■■■ 7. 로그아웃 ");
+			System.out.println("■■■■ 8. 게시판종료 ");
 			if (BoardMain.session.equals("YES")) {
 				System.out.println("■■■■ " + BoardMain.userid + "님 재방문을 환영합니다.");
 			}
@@ -97,7 +98,18 @@ public class BoardMain {
 
 				bDao.viewBoard(bno);
 			} else if (code == 7) {
-
+				System.out.println("로그아웃");
+				if(BoardMain.session.equals("YES")) {
+					System.out.println("■■■■ " + BoardMain.userid + " 님 로그아웃 되었습니다.");
+					BoardMain.session = "NO";
+					BoardMain.userid = "";
+				} else {
+					System.out.println("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
+					System.out.println("■■■■ 로그인이 필요한 기능입니다.");
+				}
+			} else if (code == 8) {
+				System.out.println("■■■■ 시스템종료");
+				System.exit(0);
 			}
 		}
 	}
