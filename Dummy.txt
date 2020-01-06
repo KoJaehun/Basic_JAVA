@@ -112,3 +112,18 @@ NOCYCLE;
 SELECT * FROM tbl_sale;
 commit;
 
+---------------------------------------------------------------------
+-- 오늘 판매한 제품의 총 판매액
+SELECT SUM(tprice) FROM tbl_sale
+WHERE TO_CHAR(regdate, 'YYYYMMDD') = TO_CHAR(SYSDATE, 'YYYYMMDD'); -- TO_CHAR <형변환
+
+-- 제품별 총판매액
+SELECT sname, SUM(tprice) 
+FROM tbl_sale
+GROUP BY sname;
+
+-- 오늘 판매한 상품의 수량과 총금액
+SELECT sname, SUM(cnt), SUM(tprice)
+FROM tbl_sale
+WHERE TO_CHAR(regdate, 'YYYYMMDD') = TO_CHAR(SYSDATE, 'YYYYMMDD')
+GROUP BY sname;
