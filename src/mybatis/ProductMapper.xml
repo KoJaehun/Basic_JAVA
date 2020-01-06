@@ -7,9 +7,14 @@
 		SELECT COUNT(*) FROM tbl_product
 		WHERE pname = #{pname}
 	</select>
-	<update id="cntplus" parameterType="marcket.ProductDTO">
-		UPDATE tbl_product
-		SET cnt = cnt + #{cnt}
+	<update id="cntchange" parameterType="marcket.ProductDTO">
+		UPDATE tbl_product SET 
+		<if test="flag == 'plus'">
+		cnt = cnt + #{cnt}
+		</if>
+		cnt = cnt - #{cnt}
+		<if test="flag == 'minus'">
+		</if>
 		WHERE pname = #{pname}
 	</update>
 	<insert id="insert" parameterType="map">
@@ -28,13 +33,15 @@
 	</delete>
 	<select id="select" resultType="marcket.ProductDTO">
 		SELECT * FROM tbl_product
+		ORDER BY pno DESC, cnt DESC
 	</select>
 	<select id="search" resultType="marcket.ProductDTO">
 		SELECT * FROM tbl_product
 		WHERE pname LIKE #{pname}
 	</select>
-	<select id="selectpname" resultType="String">
-	SELECT count(*) FROM tbl_product 
-	WHERE pname = #{pname}
+	<select id="selectUsePdt" resultType="marcket.ProductDTO">
+	SELECT * FROM tbl_product
+	WHERE cnt >= 1
+	ORDER BY pno
 	</select>
 </mapper>

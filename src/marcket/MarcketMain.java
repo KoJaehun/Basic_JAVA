@@ -1,5 +1,7 @@
 package marcket;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Scanner;
 
 public class MarcketMain {
@@ -10,8 +12,10 @@ public class MarcketMain {
 		Scanner sc = new Scanner(System.in);
 		ProductDAO pDao = new ProductDAO();
 		MarcketMain mm = new MarcketMain();
-
+		SaleDAO sDao = new SaleDAO();
 		int code = 0;
+		Boolean flag = false;
+
 		// 내부저장소
 		// 관리자 계정 ID와 PW 선언
 		String userid = "";
@@ -52,18 +56,55 @@ public class MarcketMain {
 			}
 			if (code == 1) {
 				System.out.println(" * 제품 판매 ");
+				System.out.println(" * 구매하고싶은 제품의 번호와 수량을 입력하세요.");
 				/*
-				 * 1. 판매할 pname 으로 selectOne 해서 SELECT count(*) FROM tbl_product WHERE pname =#{pname}
-				 * 디비에 판매할 제품명이 존재하는 지 확인한이후
-				 * 2. SELECT cnt FROM tbl_product WHERE pname =#pname 해서 cnt 와 판매할 량을 비교하여
-				 * cnt가 더 큰 경우 update 문으로 cnt-판매할량, SELECT price 해서 
-				 * price와 판매할량 곱해서 판매  
+				 * 1. 판매할 pname 으로 selectOne 해서 SELECT count(*) FROM tbl_product WHERE pname
+				 * =#{pname} 디비에 판매할 제품명이 존재하는 지 확인한이후 2. SELECT cnt FROM tbl_product WHERE
+				 * pname =#pname 해서 cnt 와 판매할 량을 비교하여 cnt가 더 큰 경우 update 문으로 cnt-판매할량, SELECT
+				 * price 해서 price와 판매할량 곱해서 판매
 				 */
-				System.out.println(" * 구매할 상품정보입력>>");
-				sc.nextLine();
-				String pname = sc.nextLine();
-				
-				
+
+				// 현재 등록된 재품중 재고가 1보다 큰거
+				// 즉 수량이 0인 제품을 제외한 제품 조회
+				List<ProductDTO> list = pDao.sellPdt();
+				while (true) {
+					System.out.println(" * 구매할 번호>>");
+					int buyCode = sc.nextInt();
+					System.out.println(" * 구매할 수량>>");
+					int cnt = sc.nextInt();
+
+					String sname = list.get(buyCode - 1).getPname();
+					// 판매하려는 제품명
+
+					int price = list.get(buyCode - 1).getPrice();
+					int tprice = price * cnt; // 개당가격 * 구매수량
+					int nowCnt = list.get(buyCode - 1).getCnt(); // 현재재고
+					if (nowCnt >= cnt) {
+						break;
+					} else {
+						System.out.println(" * [Msg] 재고가 부족합니다. ");
+					}
+
+					// tbl_sale 에 판매한 기록을 저장
+					// 판매하는 제품명, 수량, 총가격
+					HashMap<String, Object> map = new HashMap<>();
+					map.put("sname", sname);
+					map.put("cnt", cnt);
+					map.put("tprice", tprice);
+
+					int result = sDao.insertSale(map);
+					if (result > 0) {
+						System.out.println("판매성공 재고-합시다");
+						pDao.cntMinusPdt(sname, cnt);
+
+					} else {
+						System.out.println(" * [Msg] Error, Contact your admin");
+					}
+				}
+
+				// 1. 판매테이블 판매이력을 INSERT
+				// 2. 상품테이블 판매수량만큼 해당제품에 재고를 UPDATE
+
 			} else if (code == 2) {
 				System.out.print(" * 제품 이름을 입력하세요>>");
 				sc.nextLine();
@@ -118,10 +159,12 @@ public class MarcketMain {
 				System.out.println(" * 검색하실 상품입력>>");
 				sc.nextLine();
 				String pname = sc.nextLine();
-				
+
 				pDao.searchPdt(pname);
 			} else if (code == 7) {
-				System.out.println(" * 일일 매출현황 ");
+				System.out.println(" ■ * ■ * * ■ ■ * ■ * ■");
+				System.out.println(" * ■ 일일 매출현황 ■ * ");
+				sDao.dashBoard();
 			} else if (code == 8) {
 				System.out.println(" * 프로그램 종료 ");
 				System.out.println(" * [Msg] Exit the program. ");

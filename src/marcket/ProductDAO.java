@@ -37,13 +37,30 @@ public class ProductDAO {
 		HashMap<String, Object> map = new HashMap<>();
 		map.put("cnt", cnt);
 		map.put("pname", pname);
+		map.put("flag", "plus");
 		try {
-			result = sqlSession.update("pdt.cntplus", map);
+			result = sqlSession.update("cntchange", map);
 			if(result > 0) {
 				System.out.println("상품재고 수정 성공.");
 			} else {
 				System.out.println("상품재고 수정 실패.");
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			sqlSession.close();
+		}
+	}
+	// 상품 판매시 재고를 마이너스하는 함수
+	// 매개변수 이름이 달라도 사용가능 (순서로 들어오기때문)
+	public void cntMinusPdt(String pname, int cnt) {
+		sqlSession = sqlSessionFactory.openSession(true);
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("pname", pname);
+		map.put("cnt", cnt);
+		map.put("flag", "minus");
+		try {
+			sqlSession.update("pdt.cntchange", map);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -138,19 +155,29 @@ public class ProductDAO {
 			sqlSession.close();
 		}
 	}
-	public void sellPdt(String pname) {
+	public List<ProductDTO> sellPdt() {
 		sqlSession = sqlSessionFactory.openSession(true);
 		try {
-			result = sqlSession.selectOne("selectpname", pname);
-			if(result > 0) {
-				
-			} else {
-				
-			}
+			list = sqlSession.selectList("selectUsePdt");
+			printList(list);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			sqlSession.close();
 		}
+		
+		return list;
 	}
+	private void printList(List<ProductDTO> list) {
+		System.out.println("┌───────────────────────────────────────────────────┐");
+		int i = 1;
+		for (ProductDTO line : list) {
+			
+			System.out.println("│" + i+"번"+ line.toString()) ;
+		System.out.println("│총 상품은 " + list.size() + " 개 입니다.");
+		i += 1;
+		}
+		
+	}
+	
 }

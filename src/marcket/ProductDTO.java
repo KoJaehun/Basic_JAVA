@@ -74,8 +74,12 @@ public class ProductDTO {
 
 	@Override
 	public String toString() {
-		return "ProductDTO [pno=" + pno + ", pname=" + pname + ", company=" + company + ", price=" + price + ", cnt="
-				+ cnt + ", regdate=" + regdate + "]";
+		return "상품번호" + pno +
+				"\t상품이름 " + pname + 
+				"\t상품회사 " + company + 
+				"\t가격 " + price + 
+				"\t수량 " + cnt + 
+				"\t입고일자 " + regdate;
 	}
 	
 	
