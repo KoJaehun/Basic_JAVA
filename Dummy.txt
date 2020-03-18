@@ -619,3 +619,67 @@ SELECT MAX(sal)
 FROM emp
 GROUP BY deptno
 
+------------------------------------2020-03-18--------
+--------------------------------게시판 -----------------------------
+DROP SEQUENCE seq_board;
+CREATE SEQUENCE seq_board
+    START WITH 1
+    INCREMENT BY 1
+    NOCYCLE;
+
+DROP TABLE tbl_board CASCADE CONSTRAINTS;
+CREATE TABLE tbl_board(
+    bno number(10, 0),
+    type CHAR(4) NOT NULL,
+    title VARCHAR2(200) NOT NULL,
+    content VARCHAR2(4000) NOT NULL,
+    writer VARCHAR2(50) NOT NULL,
+    viewcnt NUMBER DEFAULT 0,
+    replycnt NUMBER DEFAULT 0,
+    goodcnt NUMBER DEFAULT 0,
+    regdate DATE DEFAULT SYSDATE,
+    updatedate DATE DEFAULT SYSDATE,
+    show CHAR(1) DEFAULT 'y',
+    ref NUMBER NOT NULL,
+    re_step NUMBER NOT NULL,
+    re_level NUMBER NOT NULL
+);
+
+-- 게시판 테이블 PK Key 추가
+ALTER TABLE tbl_board ADD CONSTRAINT pk_board
+PRIMARY KEY(bno);
+
+-- 게시글 총 15건 추가! ref=1, re_step=1 , re_level=0, type=free
+INSERT INTO tbl_board(bno, type, title, content, writer, ref, re_step, re_level)
+VALUES(seq_board.NEXTVAL, 'free', '테스트제목1', '테스트내용1', 'qorwlswn2', 1, 1, 0);
+INSERT INTO tbl_board(bno, type, title, content, writer, ref, re_step, re_level)
+VALUES(seq_board.NEXTVAL, 'free', '테스트제목2', '테스트내용2', 'qorwlswn2', 1, 1, 0);
+INSERT INTO tbl_board(bno, type, title, content, writer, ref, re_step, re_level)
+VALUES(seq_board.NEXTVAL, 'free', '테스트제목3', '테스트내용3', 'qorwlswn2', 1, 1, 0);
+INSERT INTO tbl_board(bno, type, title, content, writer, ref, re_step, re_level)
+VALUES(seq_board.NEXTVAL, 'free', '테스트제목4', '테스트내용4', 'qorwlswn2', 1, 1, 0);
+INSERT INTO tbl_board(bno, type, title, content, writer, ref, re_step, re_level)
+VALUES(seq_board.NEXTVAL, 'free', '테스트제목5', '테스트내용5', 'qorwlswn2', 1, 1, 0);
+INSERT INTO tbl_board(bno, type, title, content, writer, ref, re_step, re_level)
+VALUES(seq_board.NEXTVAL, 'free', '테스트제목6', '테스트내용6', 'qorwlswn2', 1, 1, 0);
+INSERT INTO tbl_board(bno, type, title, content, writer, ref, re_step, re_level)
+VALUES(seq_board.NEXTVAL, 'free', '테스트제목7', '테스트내용7', 'qorwlswn2', 1, 1, 0);
+INSERT INTO tbl_board(bno, type, title, content, writer, ref, re_step, re_level)
+VALUES(seq_board.NEXTVAL, 'free', '테스트제목8', '테스트내용8', 'qorwlswn2', 1, 1, 0);
+INSERT INTO tbl_board(bno, type, title, content, writer, ref, re_step, re_level)
+VALUES(seq_board.NEXTVAL, 'free', '테스트제목9', '테스트내용9', 'qorwlswn2', 1, 1, 0);
+INSERT INTO tbl_board(bno, type, title, content, writer, ref, re_step, re_level)
+VALUES(seq_board.NEXTVAL, 'free', '테스트제목10', '테스트내용10', 'qorwlswn2', 1, 1, 0);
+INSERT INTO tbl_board(bno, type, title, content, writer, ref, re_step, re_level)
+VALUES(seq_board.NEXTVAL, 'free', '테스트제목11', '테스트내용11', 'qorwlswn2', 1, 1, 0);
+INSERT INTO tbl_board(bno, type, title, content, writer, ref, re_step, re_level)
+VALUES(seq_board.NEXTVAL, 'free', '테스트제목12', '테스트내용12', 'qorwlswn2', 1, 1, 0);
+INSERT INTO tbl_board(bno, type, title, content, writer, ref, re_step, re_level)
+VALUES(seq_board.NEXTVAL, 'free', '테스트제목13', '테스트내용13', 'qorwlswn2', 1, 1, 0);
+INSERT INTO tbl_board(bno, type, title, content, writer, ref, re_step, re_level)
+VALUES(seq_board.NEXTVAL, 'free', '테스트제목14', '테스트내용14', 'qorwlswn2', 1, 1, 0);
+INSERT INTO tbl_board(bno, type, title, content, writer, ref, re_step, re_level)
+VALUES(seq_board.NEXTVAL, 'free', '테스트제목15', '테스트내용15', 'qorwlswn2', 1, 1, 0);
+
+SELECT * FROM tbl_board;
+---------------------------------------------
